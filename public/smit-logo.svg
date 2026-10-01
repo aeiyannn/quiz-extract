@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" fill="none">
+  <!-- Graduation cap + swoosh arc (green) -->
+  <path d="M100 10 L85 22 L100 34 L115 22 Z" fill="#72B626"/>
+  <rect x="108" y="22" width="3" height="14" fill="#72B626"/>
+  <path d="M108 36 Q113 42 108 46 Q103 42 108 36" fill="#72B626"/>
+  <!-- Green swoosh arc around the i -->
+  <path d="M72 30 Q55 60 72 90" stroke="#72B626" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+  <!-- S -->
+  <text x="16" y="95" font-family="Arial Black, sans-serif" font-weight="900" font-size="68" fill="#1565C0">S</text>
+  <!-- M -->
+  <text x="60" y="95" font-family="Arial Black, sans-serif" font-weight="900" font-size="68" fill="#1565C0">M</text>
+  <!-- i (with green dot) -->
+  <text x="122" y="95" font-family="Arial Black, sans-serif" font-weight="900" font-size="68" fill="#1565C0">i</text>
+  <!-- Green dot on the i -->
+  <circle cx="134" cy="18" r="7" fill="#72B626"/>
+  <!-- T -->
+  <text x="145" y="95" font-family="Arial Black, sans-serif" font-weight="900" font-size="68" fill="#1565C0">T</text>
+</svg>

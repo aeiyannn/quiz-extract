@@ -4,10 +4,9 @@
    SMIT Brand Colors — for confetti
 ══════════════════════════════════════════════════════════════════════════════ */
 const SMIT_COLORS = [
-  '#0066CC', '#3399FF', '#004C99',   // blues
-  '#00897B', '#4DB6AC', '#26C6DA',   // teals
-  '#2ECC71', '#A7F3D0',              // greens
-  '#FFD700', '#FFA500',              // golds
+  '#1565C0', '#42A5F5', '#0D47A1',   // SMIT blues (exact from logo)
+  '#72B626', '#9CCC46', '#558B1B',   // SMIT greens (exact from logo)
+  '#FFD700', '#FFA500',              // gold celebration pops
   '#ffffff',                          // white
 ];
 
@@ -294,10 +293,10 @@ function injectSvgGradient() {
   if (!svg) return;
   const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
   defs.innerHTML = `
-    <linearGradient id="smitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#0066CC"/>
-      <stop offset="50%"  stop-color="#00897B"/>
-      <stop offset="100%" stop-color="#2ECC71"/>
+    <linearGradient id="smitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1565C0"/>
+      <stop offset="50%"  stop-color="#3A8FC7"/>
+      <stop offset="100%" stop-color="#72B626"/>
     </linearGradient>`;
   svg.prepend(defs);
   document.getElementById('ring-progress').setAttribute('stroke', 'url(#smitGradient)');
