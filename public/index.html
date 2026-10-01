@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saylani SMIT · Quiz Timer</title>
+  <meta name="description" content="Saylani SMIT 45-minute live quiz session timer with real-time student result alerts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════ START SCREEN ══════════════════ -->
+  <div id="start-screen">
+    <div class="ss-bg">
+      <div class="ss-wave ss-wave1"></div>
+      <div class="ss-wave ss-wave2"></div>
+      <div class="ss-wave ss-wave3"></div>
+    </div>
+
+    <div class="ss-card">
+      <div class="ss-logo">
+        <img src="smit-logo.svg" alt="SMIT" onerror="this.style.display='none'" />
+        <div class="ss-logo-fallback">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="ss-org">Saylani Mass IT Training</div>
+      <h1 class="ss-title">Quiz Session<br/><span class="ss-title-accent">Timer</span></h1>
+      <p class="ss-desc">
+        Start a 45-minute monitored quiz session.<br/>
+        Student results will appear instantly as they submit.
+      </p>
+
+      <div class="ss-info-row">
+        <div class="ss-info-chip">
+          <span class="ss-chip-dot" style="background:#0066CC"></span>
+          45-min countdown
+        </div>
+        <div class="ss-info-chip">
+          <span class="ss-chip-dot" style="background:#00897B"></span>
+          Live results
+        </div>
+        <div class="ss-info-chip">
+          <span class="ss-chip-dot" style="background:#F59E0B"></span>
+          Confetti alerts
+        </div>
+      </div>
+
+      <button id="start-btn" class="ss-start-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Start Session
+      </button>
+
+      <p class="ss-privacy">Data stored in memory only · Never shared with third parties</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TIMER PAGE ══════════════════ -->
+  <div id="timer-page" class="hidden">
+
+    <!-- Toasts -->
+    <div id="toast-container" role="log" aria-live="polite"></div>
+
+    <!-- Student popup -->
+    <div id="student-popup" class="popup hidden" role="alert" aria-live="assertive">
+      <div class="popup-card">
+        <div class="popup-rainbow"></div>
+        <button class="popup-close" id="popup-close" aria-label="Close">&times;</button>
+        <div class="popup-avatar" id="popup-avatar">?</div>
+        <div class="popup-status-badge" id="popup-badge">PASSED</div>
+        <p class="popup-new-label">New Result!</p>
+        <h2 class="popup-name" id="popup-name">Student</h2>
+        <p class="popup-quiz" id="popup-quiz">Quiz Title</p>
+        <div class="popup-stats">
+          <div class="popup-stat">
+            <span class="popup-stat-val" id="popup-score">0/0</span>
+            <span class="popup-stat-lbl">Score</span>
+          </div>
+          <div class="popup-stat-sep"></div>
+          <div class="popup-stat">
+            <span class="popup-stat-val" id="popup-pct">0%</span>
+            <span class="popup-stat-lbl">Percentage</span>
+          </div>
+          <div class="popup-stat-sep"></div>
+          <div class="popup-stat">
+            <span class="popup-stat-val" id="popup-attempts">1</span>
+            <span class="popup-stat-lbl">Attempts</span>
+          </div>
+        </div>
+        <div class="popup-bar-wrap">
+          <div class="popup-bar-track">
+            <div class="popup-bar-fill" id="popup-bar-fill"></div>
+          </div>
+        </div>
+        <div class="popup-countdown">
+          <div class="popup-cd-fill" id="popup-cd-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Header ── -->
+    <header class="tp-header">
+      <div class="tp-brand">
+        <div class="tp-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="tp-brand-text">
+          <span class="tp-brand-name">Saylani SMIT</span>
+          <span class="tp-brand-sub">Quiz Session Monitor</span>
+        </div>
+      </div>
+      <div class="tp-header-right">
+        <div class="tp-listener">
+          <span class="tp-listener-dot"></span>
+          <span>Listening to LMS</span>
+        </div>
+        <div id="conn-badge" class="conn-badge conn-connecting">
+          <span class="conn-dot"></span>
+          <span id="conn-text">Connecting…</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Main content ── -->
+    <main class="tp-main">
+
+      <!-- Big timer block -->
+      <section class="tp-timer-section">
+        <p class="tp-session-label">SESSION IN PROGRESS</p>
+
+        <!-- SVG ring timer -->
+        <div class="tp-ring-wrap" id="tp-ring-wrap">
+          <svg class="tp-ring-svg" viewBox="0 0 220 220">
+            <!-- Outer decorative ring -->
+            <circle cx="110" cy="110" r="105" class="ring-deco"/>
+            <!-- Background track -->
+            <circle cx="110" cy="110" r="90" class="ring-track"/>
+            <!-- Progress arc -->
+            <circle cx="110" cy="110" r="90"
+              class="ring-progress" id="ring-progress"
+              stroke-dasharray="565.5 565.5"
+              stroke-dashoffset="0"
+              transform="rotate(-90 110 110)"/>
+            <!-- Dot at progress end -->
+            <circle cx="110" cy="20" r="6" class="ring-dot" id="ring-dot"/>
+          </svg>
+          <!-- Timer text inside ring -->
+          <div class="tp-ring-inner">
+            <div class="tp-ring-time" id="timer-text">45:00</div>
+            <div class="tp-ring-sub">remaining</div>
+          </div>
+        </div>
+
+        <!-- Time-up message (hidden until done) -->
+        <div id="time-up-msg" class="time-up-msg hidden">
+          <span>⏰ Session Ended!</span>
+        </div>
+      </section>
+
+      <!-- Stats row -->
+      <section class="tp-stats">
+        <div class="tp-stat-card tp-stat-blue">
+          <div class="tp-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tp-stat-num" id="stat-total">0</div>
+            <div class="tp-stat-lbl">Total Results</div>
+          </div>
+        </div>
+
+        <div class="tp-stat-card tp-stat-green">
+          <div class="tp-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tp-stat-num" id="stat-passed">0</div>
+            <div class="tp-stat-lbl">Passed</div>
+          </div>
+        </div>
+
+        <div class="tp-stat-card tp-stat-red">
+          <div class="tp-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tp-stat-num" id="stat-failed">0</div>
+            <div class="tp-stat-lbl">Failed</div>
+          </div>
+        </div>
+
+        <div class="tp-stat-card tp-stat-purple">
+          <div class="tp-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div>
+            <div class="tp-stat-num" id="stat-rate">—</div>
+            <div class="tp-stat-lbl">Pass Rate</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Last result strip -->
+      <div class="tp-last-result hidden" id="last-result-strip">
+        <span class="tp-last-label">Last result:</span>
+        <span id="last-result-name" class="tp-last-name"></span>
+        <span id="last-result-badge" class="tp-last-badge"></span>
+        <span id="last-result-time" class="tp-last-time"></span>
+      </div>
+
+      <!-- LMS note -->
+      <p class="tp-note">
+        Results appear only when the LMS page loads or refreshes in Chrome.
+      </p>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
